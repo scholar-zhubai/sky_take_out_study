@@ -84,7 +84,7 @@ public class CategoryController {
      * @param type
      * @return
      */
-    @PutMapping("/list")
+    @GetMapping("/list")
     @ApiOperation("根据类型查询")
     public Result<List<Category>> queryByType(Integer type){
         List<Category> list = categoryService.queryByType(type);

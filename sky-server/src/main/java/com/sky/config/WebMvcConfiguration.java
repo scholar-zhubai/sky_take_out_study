@@ -1,5 +1,6 @@
 package com.sky.config;
 
+import com.sky.constant.FileUploadConstant;
 import com.sky.interceptor.JwtTokenAdminInterceptor;
 import com.sky.json.JacksonObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.cbor.MappingJackson2CborHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -68,8 +68,15 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @param registry
      */
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        log.info("开始配置静态资源映射...");
+
+        //Swagger静态资源映射
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        // 将 "/image/**" 的请求映射到本地的 自定义 目录
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("file:" + FileUploadConstant.FILE_UPLOAD_PATH);
     }
 
 
@@ -88,4 +95,5 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         //将我们写的转换器加入到容器里面
         converters.add(0,converter);
     }
+
 }
